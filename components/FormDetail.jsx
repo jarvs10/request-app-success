@@ -3,8 +3,11 @@ import { sendForm } from '@/lib/api';
 import { useState } from 'react'
 import { useRouter } from "next/router";
 import Modal from './Modal';
+import Swal from 'sweetalert2';
 
 const FormDetail = ({ request }) => {
+
+  const Swal = require('sweetalert2');
 
   const { modal, setModal } = UseContext();
 
@@ -20,16 +23,22 @@ const FormDetail = ({ request }) => {
     e.preventDefault();
 
     if(email === '' && respuesta === ''){
-      return alert('Debes ingresar email y respuesta');
+      Swal.fire(
+        '! Email y Respuesta son necesarios',
+        '! Verifica que todos los datos sean llenados',
+        'question'
+      )
+
+      return;
     }
 
     await sendForm({ email, fecha, funcionario, descripcion, respuesta });
 
-    setModal(true);
-
-    setTimeout(() => {
-      setModal(false)
-    }, 3000);
+    Swal.fire(
+      'Datos enviados!',
+      'Revisa tu bandeja de correo para verificar los datos!',
+      'success'
+    )
 
     navigate.push('/');
   }

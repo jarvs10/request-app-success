@@ -2,11 +2,11 @@ import { UseContext } from "@/context/ContextProvider"
 import axios from 'axios';
 import Alert from "./Alert";
 import Modal from "./Modal";
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
 
 const Request = () => {
 
-  const Swal = require('sweetalert2')
+  const Swal = require('sweetalert2');
 
   const { setDatos, datos, error, setError, handleReset, modal } = UseContext();
 
