@@ -3,8 +3,11 @@ import axios from "axios";
 import { useEffect } from "react";
 import DataRequest from "./DataRequest";
 import { useRouter } from "next/router";
+import Swal from 'sweetalert2'
 
 const FormRequest = () => {
+
+  const Swal = require('sweetalert2')
 
   const navigate = useRouter();
 
@@ -22,14 +25,33 @@ const FormRequest = () => {
     fetchRequest()
   }, [])
 
-  const handleDelete = async (id) => {
-    try {
-      await axios.delete(`http://localhost:3000/api/request/${id}`);
-      navigate.push('/');
-      // window.location.reload();
-    } catch (error) {
-      console.log(error);
-    }
+  const handleDelete = (id) => {
+
+    Swal.fire({
+      title: 'Seguro que desea eliminar?',
+      text: "No podras revertir esta accion!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          Swal.fire(
+            'Deleted!',
+            'Your file has been deleted.',
+            'success'
+          )
+          
+          await axios.delete(`http://localhost:3000/api/request/${id}`);
+          navigate.push('/');
+          // window.location.reload();
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    })
   }
 
   return (

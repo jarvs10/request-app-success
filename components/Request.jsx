@@ -2,11 +2,13 @@ import { UseContext } from "@/context/ContextProvider"
 import axios from 'axios';
 import Alert from "./Alert";
 import Modal from "./Modal";
-// import {useRouter} from 'next/navigation';
+import Swal from 'sweetalert2'
 
 const Request = () => {
 
-  const { setDatos, datos, error, setError, handleReset, modal, setModal } = UseContext();
+  const Swal = require('sweetalert2')
+
+  const { setDatos, datos, error, setError, handleReset, modal } = UseContext();
 
   const { fecha, funcionario, solicitud, descripcion } = datos;
 
@@ -30,11 +32,12 @@ const Request = () => {
     try {
       await axios.post("http://localhost:3000/api/request/getdata", datos);
       console.log('enviando datos');
-      setModal(true);
 
-      setTimeout(() => {
-        setModal(false);
-      }, 3000);
+      Swal.fire(
+        'Datos agregados!',
+        'Se han agregado los datos correctamente!',
+        'success'
+      )
       
     } catch (error) {
       console.log(error);
