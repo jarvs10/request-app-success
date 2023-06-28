@@ -1,6 +1,6 @@
 import { UseContext } from "@/context/ContextProvider";
 import axios from "axios";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import DataRequest from "./DataRequest";
 import { useRouter } from "next/router";
 import Swal from 'sweetalert2'
@@ -12,6 +12,25 @@ const FormRequest = () => {
   const navigate = useRouter();
 
   const { solicitudes, setSolicitudes, filtros, gastosFiltrados } = UseContext();
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const dataforPage = 8;
+  const lastIndex = currentPage * dataforPage;
+  const firstIndex = lastIndex - dataforPage;
+  const datas = solicitudes.slice(firstIndex, lastIndex);
+  const npage = Math.ceil(solicitudes.length / dataforPage);
+
+  const prevPage = () => {
+    if(currentPage !== 1){
+      setCurrentPage(currentPage - 1)
+    }
+  }
+
+  const nextPage = () => {
+    if(currentPage !== npage){
+      setCurrentPage(currentPage + 1)
+    }
+  }
 
   useEffect(() => {
     const fetchRequest = async () => {
@@ -78,7 +97,7 @@ const FormRequest = () => {
                   />
                 )
               }) : (
-                solicitudes.map(req => {
+                datas.map(req => {
                   return (
                     <DataRequest
                       key={req.id}
@@ -91,6 +110,10 @@ const FormRequest = () => {
           }
         </tbody>
       </table>
+      <div className="flex justify-center mt-3 gap-2">
+        <button className="bg-lime-600 hover:bg-lime-700 px-3 py-1 text-white font-bold rounded-md" onClick={prevPage} type="button">Prev</button>
+        <button className="bg-indigo-600 hover:bg-indigo-700 px-3 py-1 text-white font-bold rounded-md" onClick={nextPage} type="button">Next</button>
+      </div>
     </div>
   )
 }
